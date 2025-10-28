@@ -62,9 +62,12 @@ jobs:
       - name: Ensure Gradle wrapper
         run: |
           if [ ! -f ./gradlew ]; then
-            echo 'Gradle wrapper not found - installing gradle and generating wrapper'
-            sudo apt-get install -y gradle
-            gradle wrapper --gradle-version 8.1.1
+            echo 'Gradle wrapper not found - downloading Gradle distribution and generating wrapper'
+            GRADLE_VERSION=8.1.1
+            wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -O gradle.zip
+            unzip -q gradle.zip -d /tmp
+            /tmp/gradle-${GRADLE_VERSION}/bin/gradle wrapper --gradle-version ${GRADLE_VERSION}
+            rm -rf gradle.zip /tmp/gradle-${GRADLE_VERSION}
             chmod +x gradlew
           fi
 
